@@ -24,6 +24,8 @@ class Population {
     double averageFitness;
 
     public Population(int size, double mutationRate) {
+        r = new Random();
+
         schedules = new Schedule[size];
         readData();
         for(Schedule s : schedules) s = new Schedule(masterList, r);
@@ -70,12 +72,22 @@ class Population {
     }
 
     void calculateFitness() {
+        int[] fitnesses = new int[schedules.length];
+        for(int i = 0; i < schedules.length; i++) {
+            schedules[i].calculateFitness();
+            fitnesses[i] = schedules[i].fitness;
+        }
+
+        int localMaxFitness = 0;
         for(Schedule s : schedules) {
             s.calculateFitness();
-            if(s.fitness > maxFitness) {
-                maxFitness = s.fitness;
-                bestSchedule = s;
-            }
+            if(s.fitness > localMaxFitness) localMaxFitness = s.fitness;
+        }
+
+        for(Schedule s : schedules) {
+            s.normalizeFitness(localMaxFitness);
+            //max fitness is normalized
+            if(s.fitness > maxFitness) maxFitness = s.fitness;
         }
     }
 
@@ -105,7 +117,7 @@ class Population {
     }
 
     boolean isDone() {
-        if(generations > 15000) return true;
+        if(maxFitness == 100 || generations > 15000) return true;
         else return false;
     }
 

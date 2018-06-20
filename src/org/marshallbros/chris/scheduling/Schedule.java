@@ -31,8 +31,18 @@ class Schedule {
     }
 
     void calculateFitness() {
-        //add a fitness function that deals with scheduling conflicts
-        fitness = 1;
+        fitness = 0;
+
+        //Individual fitness is how many conflicts a schedule has the lower the better. This will be normalized and inverted against the population.
+        for(int i = 0; i < groups.length - 1; i++) {
+            fitness += groups[i].conflicts(groups[i+1]);
+        }
+    }
+
+    void normalizeFitness(int maxFitness) {
+        fitness = maxFitness - fitness;
+        fitness /= maxFitness;
+        fitness *= 100;
     }
 
     void mutate(double mutationRate, Random r) {
