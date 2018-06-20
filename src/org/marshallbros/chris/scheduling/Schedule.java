@@ -1,11 +1,21 @@
 package org.marshallbros.chris.scheduling;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Schedule {
     Group[] groups = new Group[10];
+    int fitness;
 
-    public Schedule() {
+    protected Schedule(Group[] parentA, Group[] parentB, Random r) {
+        int midPoint = r.nextInt(parentA.length);
+        for(int i = 0; i < parentA.length; i++) {
+            if(i < midPoint) groups[i] = parentA[i];
+            else groups[i] = parentB[i];
+        }
+    }
+
+    protected Schedule(Random r) {
         readData();
     }
 
@@ -35,5 +45,10 @@ public class Schedule {
 
             groups[count] = new Group(name, members);
         }
+    }
+
+    void calculateFitness() {
+        //add a fitness function that deals with scheduling conflicts
+        fitness = 1;
     }
 }
