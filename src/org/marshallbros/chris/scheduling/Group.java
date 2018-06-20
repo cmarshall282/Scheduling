@@ -1,11 +1,13 @@
 package org.marshallbros.chris.scheduling;
 
-public class Group {
+class Group {
     String name;
-    private String[] members;
+    int groupSize;
+    String[] members;
 
-    public Group(String name, String[] members) {
+    public Group(String name, int groupSize, String[] members) {
         this.name = name;
+        this.groupSize = groupSize;
         this.members = members;
     }
 }

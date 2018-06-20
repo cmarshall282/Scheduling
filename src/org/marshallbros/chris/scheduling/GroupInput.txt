@@ -1,0 +1,8 @@
+SAMPLE INPUT
+Class 1
+5
+Jeff
+George
+Jim
+Bob
+Jerry

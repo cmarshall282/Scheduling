@@ -1,10 +1,9 @@
 package org.marshallbros.chris.scheduling;
 
 import java.util.Random;
-import java.util.Scanner;
 
-public class Schedule {
-    Group[] groups = new Group[10];
+class Schedule {
+    Group[] groups;
     int fitness;
 
     protected Schedule(Group[] parentA, Group[] parentB, Random r) {
@@ -15,40 +14,35 @@ public class Schedule {
         }
     }
 
-    protected Schedule(Random r) {
-        readData();
+    protected Schedule(Group[] masterList, Random r) {
+        groups = masterList;
+
+        randomizeGroups(r);
     }
 
-    //Move to a better location later. Don't want to read the file every time we make a new schedule
-    private void readData() {
-        Scanner input = new Scanner("input-file");
-        int count = 0;
+    private void randomizeGroups(Random r) {
+        for(int i = 0; i < groups.length; i++) {
+            int index = r.nextInt(groups.length);
 
-        while(input.hasNextLine()) {
-            String name = input.nextLine();
-
-
-            String temp = input.nextLine();
-
-            int groupSize = 0;
-            try {
-                groupSize = Integer.parseInt(input.nextLine());
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-
-            String[] members = new String[groupSize];
-
-            for(int i = 0; i < members.length; i++) {
-                members[i] = input.nextLine();
-            }
-
-            groups[count] = new Group(name, members);
+            Group a = groups[index];
+            groups[index] = groups[i];
+            groups[i] = a;
         }
     }
 
     void calculateFitness() {
         //add a fitness function that deals with scheduling conflicts
         fitness = 1;
+    }
+
+    void mutate(double mutationRate, Random r) {
+        if(r.nextDouble() < mutationRate) {
+            int indexOne = r.nextInt(groups.length);
+            int indexTwo = r.nextInt(groups.length);
+
+            Group a = groups[indexOne];
+            groups[indexOne] = groups[indexTwo];
+            groups[indexTwo] = a;
+        }
     }
 }

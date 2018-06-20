@@ -1,15 +1,21 @@
 package org.marshallbros.chris.scheduling;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
-public class Population {
+class Population {
     private Random r;
 
     //Variables for genetic algorithm
     private Schedule[] schedules;
     private LinkedList<Schedule> matingPool;
     private double mutationRate;
+
+    //Master group list
+    private Group[] masterList = new Group[1];
 
     //Data variables
     int generations;
@@ -19,13 +25,48 @@ public class Population {
 
     public Population(int size, double mutationRate) {
         schedules = new Schedule[size];
-        for(Schedule s : schedules) s = new Schedule(r);
+        readData();
+        for(Schedule s : schedules) s = new Schedule(masterList, r);
         matingPool = new LinkedList<>();
         this.mutationRate = mutationRate;
 
         generations = 0;
         maxFitness = 0;
         averageFitness = 0;
+    }
+
+    private void readData() {
+        File inputFile = new File("/home/chris/IdeaProjects/Scheduling/src/org/marshallbros/chris/scheduling/GroupInput.txt");
+
+        try {
+            Scanner input = new Scanner(inputFile);
+
+            int count = 0;
+
+            //Skip the title line
+            input.nextLine();
+
+
+            while(input.hasNextLine()) {
+                String name = input.nextLine();
+
+                int groupSize = 0;
+                try {
+                    groupSize = Integer.parseInt(input.nextLine());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+                String[] members = new String[groupSize];
+                for(int i = 0; i < members.length; i++) {
+                    members[i] = input.nextLine();
+                }
+
+                masterList[count] = new Group(name, groupSize, members);
+            }
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     void calculateFitness() {
@@ -57,7 +98,7 @@ public class Population {
             Schedule parentB = matingPool.get(b);
 
             Schedule child = new Schedule(parentA.groups, parentB.groups, r);
-            //child.mutate();
+            child.mutate(mutationRate, r);
 
             schedules[i] = child;
         }
