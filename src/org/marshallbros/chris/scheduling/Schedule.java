@@ -61,8 +61,8 @@ class Schedule {
     }
 
     void normalizeFitness(double maxFitness) {
-        //plus one for testing purposes. Will remove later when I have a bigger data set.
-        fitness = maxFitness - fitness + 1;
+        fitness = maxFitness - fitness;
+        if(fitness <= 0) fitness++;
         fitness /= maxFitness;
         fitness *= 100;
     }

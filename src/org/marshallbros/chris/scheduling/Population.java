@@ -130,7 +130,7 @@ class Population {
     }
 
     boolean isDone() {
-        if(maxFitness > 100 || generations > 15000) return true;
+        if(maxFitness >= 100 || generations > 2000) return true;
         else return false;
     }
 
