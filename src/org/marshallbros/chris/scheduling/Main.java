@@ -15,7 +15,7 @@ public class Main {
         }
 
         //Print out end result
-        for(int i = 0; i < 10; i++) System.out.println("");
+        for(int i = 0; i < 10; i++) System.out.println();
         population.printBest();
     }
 }

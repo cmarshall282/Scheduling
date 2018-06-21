@@ -16,7 +16,7 @@ class Group {
 
         for(int i = 0; i < members.length; i++) {
             for(int j = 0; j < nextGroup.members.length; j++) {
-                if(members[i].equals(members[j])) totalConflicts++;
+                if(members[i].equals(nextGroup.members[j])) totalConflicts++;
             }
         }
 

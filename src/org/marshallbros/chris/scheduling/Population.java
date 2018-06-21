@@ -19,7 +19,7 @@ class Population {
 
     //Data variables
     int generations;
-    int maxFitness;
+    double maxFitness;
     private Schedule bestSchedule;
     double averageFitness;
 
@@ -28,13 +28,13 @@ class Population {
 
         schedules = new Schedule[size];
         readData();
-        for(Schedule s : schedules) s = new Schedule(masterList, r);
+        for(int i = 0; i < schedules.length; i++) schedules[i] = new Schedule(masterList, r);
         matingPool = new LinkedList<>();
         this.mutationRate = mutationRate;
 
         generations = 0;
-        maxFitness = 0;
-        averageFitness = 0;
+        maxFitness = 0.0;
+        averageFitness = 0.0;
     }
 
     private void readData() {
@@ -79,18 +79,17 @@ class Population {
     }
 
     void calculateFitness() {
-        int[] fitnesses = new int[schedules.length];
         for(int i = 0; i < schedules.length; i++) {
             schedules[i].calculateFitness();
-            fitnesses[i] = schedules[i].fitness;
         }
 
-        int localMaxFitness = 0;
+        double localMaxFitness = 0;
         for(Schedule s : schedules) {
             s.calculateFitness();
             if(s.fitness > localMaxFitness) localMaxFitness = s.fitness;
         }
 
+        double totalFitness = 0.0;
         for(Schedule s : schedules) {
             s.normalizeFitness(localMaxFitness);
             //max fitness is normalized
@@ -98,7 +97,9 @@ class Population {
                 maxFitness = s.fitness;
                 bestSchedule = s;
             }
+            totalFitness += s.fitness;
         }
+        totalFitness /= schedules.length;
     }
 
     void generateMatingPool() {
@@ -124,10 +125,12 @@ class Population {
 
             schedules[i] = child;
         }
+
+        generations++;
     }
 
     boolean isDone() {
-        if(maxFitness == 100 || generations > 15000) return true;
+        if(maxFitness > 100 || generations > 15000) return true;
         else return false;
     }
 

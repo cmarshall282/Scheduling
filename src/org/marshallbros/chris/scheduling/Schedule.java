@@ -4,13 +4,30 @@ import java.util.Random;
 
 class Schedule {
     Group[] groups;
-    int fitness;
+    double fitness;
 
     protected Schedule(Group[] parentA, Group[] parentB, Random r) {
-        int midPoint = r.nextInt(parentA.length);
-        for(int i = 0; i < parentA.length; i++) {
-            if(i < midPoint) groups[i] = parentA[i];
-            else groups[i] = parentB[i];
+        groups = new Group[parentA.length];
+        int midPoint = r.nextInt(groups.length);
+        int count = 0;
+        while(count < midPoint) {
+            groups[count] = parentA[count];
+            count++;
+        }
+
+        int leftoverSize = groups.length - midPoint;
+        Group[] leftover = new Group[leftoverSize];
+        for(int i = 0; i < leftoverSize; i++) {
+            leftover[i] = parentA[midPoint + i];
+        }
+
+        for(int i = 0; i < parentB.length; i++) {
+            for(int j = 0; j < leftover.length; j++) {
+                if((parentB[i].name).equals(leftover[j].name)) {
+                    groups[count] = leftover[j];
+                    count++;
+                }
+            }
         }
     }
 
@@ -43,8 +60,9 @@ class Schedule {
         }
     }
 
-    void normalizeFitness(int maxFitness) {
-        fitness = maxFitness - fitness;
+    void normalizeFitness(double maxFitness) {
+        //plus one for testing purposes. Will remove later when I have a bigger data set.
+        fitness = maxFitness - fitness + 1;
         fitness /= maxFitness;
         fitness *= 100;
     }
