@@ -43,7 +43,8 @@ class Population {
         try {
             Scanner input = new Scanner(inputFile);
 
-            int count = 0;
+            //This section reads the file into a linked list and then copies it to an array to allow for dynamic input
+            LinkedList<Group> tempList = new LinkedList<>();
 
             //Skip the title line
             input.nextLine();
@@ -64,7 +65,13 @@ class Population {
                     members[i] = input.nextLine();
                 }
 
-                masterList[count] = new Group(name, groupSize, members);
+                tempList.add(new Group(name, groupSize, members));
+            }
+
+            masterList = new Group[tempList.size()];
+
+            for(int i = 0; i < masterList.length; i++) {
+                masterList[i] = tempList.get(i);
             }
         } catch(FileNotFoundException e) {
             e.printStackTrace();
@@ -87,7 +94,10 @@ class Population {
         for(Schedule s : schedules) {
             s.normalizeFitness(localMaxFitness);
             //max fitness is normalized
-            if(s.fitness > maxFitness) maxFitness = s.fitness;
+            if(s.fitness > maxFitness)  {
+                maxFitness = s.fitness;
+                bestSchedule = s;
+            }
         }
     }
 
