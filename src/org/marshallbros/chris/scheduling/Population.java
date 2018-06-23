@@ -20,7 +20,7 @@ class Population {
     //Data variables
     int generations;
     double maxFitness;
-    private Schedule bestSchedule;
+    Schedule bestSchedule;
     double averageFitness;
 
     public Population(int size, double mutationRate) {
@@ -100,7 +100,7 @@ class Population {
             }
             totalFitness += s.fitness;
         }
-        totalFitness /= schedules.length;
+        averageFitness = totalFitness / schedules.length;
     }
 
     void generateMatingPool() {
@@ -133,9 +133,5 @@ class Population {
     boolean isDone() {
         if(maxFitness >= 100 || generations > 2000) return true;
         else return false;
-    }
-
-    void printBest() {
-        for(Group g : bestSchedule.groups) System.out.println(g.name);
     }
 }
