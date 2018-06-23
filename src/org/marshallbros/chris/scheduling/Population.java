@@ -52,6 +52,7 @@ class Population {
 
             while(input.hasNextLine()) {
                 String name = input.nextLine();
+                String type = input.nextLine();
 
                 int groupSize = 0;
                 try {
@@ -65,7 +66,7 @@ class Population {
                     members[i] = input.nextLine();
                 }
 
-                tempList.add(new Group(name, groupSize, members));
+                tempList.add(new Group(name, type, groupSize, members));
             }
 
             masterList = new Group[tempList.size()];

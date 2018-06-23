@@ -2,13 +2,21 @@ package org.marshallbros.chris.scheduling;
 
 class Group {
     String name;
+    String type;
     int groupSize;
     String[] members;
 
-    public Group(String name, int groupSize, String[] members) {
+    public Group(String name, String type, int groupSize, String[] members) {
         this.name = name;
+        this.type = type;
         this.groupSize = groupSize;
         this.members = members;
+    }
+
+    double typeConflict(Group nextGroup) {
+        //return a half so it is less important that member scheduling
+        if(type.equals(nextGroup.type)) return 0.5;
+        return 0.0;
     }
 
     int conflicts(Group nextGroup) {

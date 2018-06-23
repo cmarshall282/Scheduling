@@ -50,8 +50,12 @@ class Schedule {
     void calculateFitness() {
         fitness = 0;
 
-        //Individual fitness is how many conflicts a schedule has the lower the better. This will be normalized and inverted against the population.
+        //Individual fitness is how many conflicts a schedule has (both members and type) the lower the better.
+        // This will be normalized and inverted against the population.
         for(int i = 0; i < groups.length - 1; i++) {
+            //calculate type conflict
+            fitness += groups[i].typeConflict(groups[i+1]);
+
             //Calculate fitness three groups out when possible.
             fitness += groups[i].conflicts(groups[i+1]);
             //make sure it doesn't pull from a non-existent index
